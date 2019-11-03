@@ -1,0 +1,10 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {},
+        "license": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "paths": {}
+}
