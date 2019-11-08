@@ -41,6 +41,13 @@ func FindOneUserByUsername(username string) (user User, err error) {
 	return
 }
 
+func (user *User) SetEmail(email string) error {
+	if len(email) == 0 {
+		errors.New("email should not be empty!")
+	}
+	return user.UpdateUserAttr("email", email)
+}
+
 //  err := DB.Model(userModel).UpdateUserAttr(User{Username: "wangzitian0"}).Error
 func (user *User) UpdateUserAttr(name, value string) error {
 	err := DB.Model(user).Update(name, value).Error
