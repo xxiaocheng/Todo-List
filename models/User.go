@@ -4,15 +4,17 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// User model
 type User struct {
 	gorm.Model
-	Username     string `gorm:"unique_index;not null"`
+	Username     string `gorm:"unique_index;unique;not null"`
 	PasswordHash string `gorm:"not null"`
-	Email        string `gorm:"not null"`
+	Email        string `gorm:"unique;not null"`
 	Todos        []Todo
 	Groups       []Group
 }
 
+// Migrate the `User` model
 func AutoMigrateUser() {
 	DB.AutoMigrate(&User{})
 }

@@ -5,7 +5,7 @@ import (
 	"os"
 	"path"
 	"time"
-	"todoList/conf"
+	"todoList/config"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -13,8 +13,8 @@ import (
 
 func LoggerToFile() gin.HandlerFunc {
 
-	logFilePath := conf.Config.LogFilePath
-	logFileName := conf.Config.LogFileName
+	logFilePath := config.Config.LogFilePath
+	logFileName := config.Config.LogFileName
 
 	//日志文件
 	fileName := path.Join(logFilePath, logFileName)

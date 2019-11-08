@@ -1,4 +1,4 @@
-package conf
+package config
 
 import (
 	"log"
@@ -21,9 +21,15 @@ type LogConfig struct {
 	LogFileName string `ini:"log_file_name"`
 }
 
+type HashIdsConfig struct {
+	Salt      string `ini:"salt"`
+	MinLength int    `ini:"min_length"`
+}
+
 type AllConfig struct {
 	MySqlConf
 	LogConfig
+	HashIdsConfig
 }
 
 var (
@@ -41,6 +47,7 @@ func init() {
 		Port: "3306",
 	},
 		LogConfig{},
+		HashIdsConfig{},
 	}
 
 	confPath := path.Join(getCurrentPath(), EnvMode+"_conf.ini")
@@ -52,6 +59,7 @@ func init() {
 
 	err = cfg.Section("mysql").MapTo(&Config.MySqlConf)
 	err = cfg.Section("log").MapTo(&Config.LogConfig)
+	err = cfg.Section("hashIds").MapTo(&Config.HashIdsConfig)
 	if err != nil {
 		log.Print("Mapping config error.")
 	}

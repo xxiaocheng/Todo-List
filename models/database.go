@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 	"log"
-	"todoList/conf"
+	"todoList/config"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -23,7 +23,7 @@ func InitMysql() {
 
 	databaseArgs := "%s:%s@(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local"
 
-	databaseArgs = fmt.Sprintf(databaseArgs, conf.Config.MySqlConf.Username, conf.Config.MySqlConf.Password, conf.Config.MySqlConf.Host+":"+conf.Config.MySqlConf.Port, conf.Config.MySqlConf.Database)
+	databaseArgs = fmt.Sprintf(databaseArgs, config.Config.MySqlConf.Username, config.Config.MySqlConf.Password, config.Config.MySqlConf.Host+":"+config.Config.MySqlConf.Port, config.Config.MySqlConf.Database)
 
 	db, err := gorm.Open("mysql", databaseArgs)
 	if err != nil {

@@ -9,6 +9,8 @@ require (
 	github.com/jinzhu/gorm v1.9.11
 	github.com/sirupsen/logrus v1.4.2
 	github.com/smartystreets/goconvey v1.6.4 // indirect
+	github.com/speps/go-hashids v2.0.0+incompatible
 	github.com/swaggo/swag v1.6.3
+	golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c
 	gopkg.in/ini.v1 v1.49.0
 )
