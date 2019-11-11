@@ -4,6 +4,7 @@ import (
 	"log"
 	"path"
 	"runtime"
+	"time"
 
 	"gopkg.in/ini.v1"
 )
@@ -26,10 +27,16 @@ type HashIdsConfig struct {
 	MinLength int    `ini:"min_length"`
 }
 
+type JwtConfig struct {
+	Secret     string        `ini:"secret"`
+	ExpireTime time.Duration `ini:"expire_time"`
+}
+
 type AllConfig struct {
 	MySqlConf
 	LogConfig
 	HashIdsConfig
+	JwtConfig
 }
 
 var (
@@ -48,6 +55,7 @@ func init() {
 	},
 		LogConfig{},
 		HashIdsConfig{},
+		JwtConfig{},
 	}
 
 	confPath := path.Join(getCurrentPath(), EnvMode+"_conf.ini")
@@ -60,6 +68,7 @@ func init() {
 	err = cfg.Section("mysql").MapTo(&Config.MySqlConf)
 	err = cfg.Section("log").MapTo(&Config.LogConfig)
 	err = cfg.Section("hashIds").MapTo(&Config.HashIdsConfig)
+	err = cfg.Section("jwt").MapTo(&Config.JwtConfig)
 	if err != nil {
 		log.Print("Mapping config error.")
 	}
