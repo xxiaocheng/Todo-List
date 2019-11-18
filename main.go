@@ -13,7 +13,7 @@ func main() {
 	fmt.Println(token)
 
 	claims, _ := utils.ParseJwtToken(token)
-	fmt.Println((*claims)["exp"])
+	fmt.Println((*claims)["id"])
 
 	r := gin.Default()
 	r.Use(logs.LoggerToFile())
