@@ -75,7 +75,7 @@ type CreateTaskRequest struct {
 
 // modify deadline，taskContent,status
 type ModifyTaskRequest struct {
-	TaskContent string 	`form:"task_content"`
-	Deadline    time.Time	`form:"deadline"`
-	IsDone      bool	`form:"is_done"`
+	TaskContent string    `form:"task_content"`
+	Deadline    time.Time `form:"deadline"`
+	IsDone      bool      `form:"is_done"`
 }

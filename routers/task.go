@@ -144,7 +144,7 @@ func DeleteOneTask(c *gin.Context) {
 
 func ModifyTask(c *gin.Context) {
 	appG := serializers.Gin{C: c}
-	r:=serializers.ModifyTaskRequest{
+	r := serializers.ModifyTaskRequest{
 		TaskContent: "",
 		Deadline:    time.Time{},
 		IsDone:      false,
@@ -155,21 +155,21 @@ func ModifyTask(c *gin.Context) {
 		return
 	}
 	taskID := hashID.DecodeHashToID(c.Param("task"))
-	if r.TaskContent!=""{
-		err:=userModel.ModifyTaskContent(taskID,r.TaskContent)
-		if err!=nil{
+	if r.TaskContent != "" {
+		err := userModel.ModifyTaskContent(taskID, r.TaskContent)
+		if err != nil {
 			appG.Response(http.StatusForbidden, serializers.ErrorEditTaskFail, nil)
 			return
 		}
-	}else if r.Deadline!=(time.Time{}){
-		err:=userModel.ModifyTaskDeadline(taskID,r.Deadline)
-		if err!=nil{
+	} else if r.Deadline != (time.Time{}) {
+		err := userModel.ModifyTaskDeadline(taskID, r.Deadline)
+		if err != nil {
 			appG.Response(http.StatusForbidden, serializers.ErrorEditTaskFail, nil)
 			return
 		}
-	}else {
-		err:=userModel.ModifyTaskStatus(taskID,r.IsDone)
-		if err!=nil{
+	} else {
+		err := userModel.ModifyTaskStatus(taskID, r.IsDone)
+		if err != nil {
 			appG.Response(http.StatusForbidden, serializers.ErrorEditTaskFail, nil)
 			return
 		}

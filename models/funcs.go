@@ -154,31 +154,31 @@ func (user *User) PagedGroups(offset, limit int) ([]Group, int, error) {
 	return groups, count, err
 }
 
-func (user *User) CreateTaskWithoutGroup(taskContent string) (Task,error) {
-	task:=Task{TaskContent:taskContent}
+func (user *User) CreateTaskWithoutGroup(taskContent string) (Task, error) {
+	task := Task{TaskContent: taskContent}
 	if task.Deadline == (time.Time{}) {
 		task.Deadline = time.Now()
 	}
 	err := DB.Model(&user).Association("Tasks").Append(&task).Error
-	return task,err
+	return task, err
 }
 
-func (user *User) CreateTaskWithGroup(groupID uint, taskContent string) (Task,error) {
-	group:=Group{}
-	task:=Task{TaskContent:taskContent}
+func (user *User) CreateTaskWithGroup(groupID uint, taskContent string) (Task, error) {
+	group := Group{}
+	task := Task{TaskContent: taskContent}
 	if task.Deadline == (time.Time{}) {
 		task.Deadline = time.Now()
 	}
 	sx := DB.Begin()
-	sx.First(&group,groupID)
+	sx.First(&group, groupID)
 	if group.UserId != user.ID {
 		sx.Commit()
-		return task,errors.New("This group not owns by the user")
+		return task, errors.New("This group not owns by the user")
 	}
 	task.UserId = user.ID
 	err := sx.Model(&group).Association("Tasks").Append(&task).Error
 	sx.Commit()
-	return task,err
+	return task, err
 }
 
 func (user *User) PagedTodayTasks(offset, limit int) ([]Task, int, error) {
@@ -252,7 +252,7 @@ func (user *User) ModifyTaskDeadline(taskID uint, newDeadline time.Time) error {
 	return err
 }
 
-func (user *User) ModifyTaskStatus(taskID uint,newStatus bool) error  {
+func (user *User) ModifyTaskStatus(taskID uint, newStatus bool) error {
 	err := user.updateTaskAttr(taskID, "is_done", newStatus)
 	return err
 }

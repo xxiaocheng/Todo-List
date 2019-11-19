@@ -1,8 +1,8 @@
 package models
 
 import (
-	"time"
 	"github.com/jinzhu/gorm"
+	"time"
 )
 
 type Task struct {

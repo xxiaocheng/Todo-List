@@ -55,8 +55,8 @@ type TaskResponse struct {
 // Make response for `Group`
 func GroupSerializer(group models.Group) GroupResponse {
 	var tasks []TaskResponse
-	for _,task:=range group.Tasks{
-		tasks=append(tasks,TaskSerializer(task))
+	for _, task := range group.Tasks {
+		tasks = append(tasks, TaskSerializer(task))
 	}
 	return GroupResponse{
 		HashID:    hashID.EncodeIDToHash(group.ID),
@@ -64,8 +64,9 @@ func GroupSerializer(group models.Group) GroupResponse {
 		Tasks:     tasks,
 	}
 }
+
 // Make response for `Task`
-func  TaskSerializer(task models.Task) TaskResponse {
+func TaskSerializer(task models.Task) TaskResponse {
 	return TaskResponse{
 		HashID:      hashID.EncodeIDToHash(task.ID),
 		TaskContent: task.TaskContent,
@@ -74,18 +75,18 @@ func  TaskSerializer(task models.Task) TaskResponse {
 	}
 }
 
-func SerializerGroupsFromModel(groupModels []models.Group) []GroupResponse{
+func SerializerGroupsFromModel(groupModels []models.Group) []GroupResponse {
 	var groupResponses []GroupResponse
-	for _,groupModel :=range groupModels {
-		groupResponses=append(groupResponses,GroupSerializer(groupModel))
+	for _, groupModel := range groupModels {
+		groupResponses = append(groupResponses, GroupSerializer(groupModel))
 	}
 	return groupResponses
 }
 
-func SerializerTasksFromModel(taskModels []models.Task) []TaskResponse{
+func SerializerTasksFromModel(taskModels []models.Task) []TaskResponse {
 	var taskResponses []TaskResponse
-	for _,taskModel :=range taskModels{
-		taskResponses=append(taskResponses,TaskSerializer(taskModel))
+	for _, taskModel := range taskModels {
+		taskResponses = append(taskResponses, TaskSerializer(taskModel))
 	}
 	return taskResponses
 }
