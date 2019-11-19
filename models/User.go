@@ -1,6 +1,6 @@
 package models
 
-import (
+import(
 	"github.com/jinzhu/gorm"
 )
 
@@ -10,7 +10,7 @@ type User struct {
 	Username     string `gorm:"unique_index;unique;not null"`
 	PasswordHash string `gorm:"not null"`
 	Email        string `gorm:"unique;not null"`
-	Todos        []Todo
+	Tasks        []Task
 	Groups       []Group
 }
 

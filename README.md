@@ -1,2 +1,2 @@
-# Todo-List
-A Todo-List backend by Golang
+# Task-List
+A Task-List backend by Golang

@@ -10,10 +10,12 @@ const (
 	ErrorEditGroupFail   = 10003
 	ErrorPutGroupFail    = 10004
 
-	ErrorGetTodoFail    = 10101
-	ErrorDeleteTodoFail = 10102
-	ErrorEditTodoFail   = 10103
-	ErrorPutTodoFail    = 10104
+	ErrorGetTaskFail    = 10101
+	ErrorDeleteTaskFail = 10102
+	ErrorEditTaskFail   = 10103
+	ErrorPutTaskFail    = 10104
+
+	ErrorPutUserFail = 10204
 
 	ErrorAuthCheckTokenFail    = 30001
 	ErrorAuthCheckTokenTimeout = 30002
@@ -31,10 +33,12 @@ var ErrorMsgMap = map[int]string{
 	ErrorEditGroupFail:   "编辑分组失败",
 	ErrorPutGroupFail:    "增加分组失败",
 
-	ErrorGetTodoFail:    "获取TODO失败",
-	ErrorDeleteTodoFail: "删除TODO失败",
-	ErrorEditTodoFail:   "编辑TODO失败",
-	ErrorPutTodoFail:    "增加TODO失败",
+	ErrorGetTaskFail:    "获取TODO失败",
+	ErrorDeleteTaskFail: "删除TODO失败",
+	ErrorEditTaskFail:   "编辑TODO失败",
+	ErrorPutTaskFail:    "增加TODO失败",
+
+	ErrorPutUserFail: "增加用户失败",
 
 	ErrorAuthCheckTokenFail:    "Token鉴权失败",
 	ErrorAuthCheckTokenTimeout: "Token已超时",

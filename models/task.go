@@ -2,13 +2,12 @@ package models
 
 import (
 	"time"
-
 	"github.com/jinzhu/gorm"
 )
 
-type Todo struct {
+type Task struct {
 	gorm.Model
-	TodoContent string    `gorm:"not null"`
+	TaskContent string    `gorm:"not null"`
 	IsDone      bool      `gorm:"type:boolean;default:false"`
 	Deadline    time.Time `gorm:"type:date;default:null"`
 	Group       Group
@@ -17,6 +16,6 @@ type Todo struct {
 	UserId      uint `gorm:"index;not null"`
 }
 
-func AutoMigrateTodo() {
-	DB.AutoMigrate(&Todo{})
+func AutoMigrateTask() {
+	DB.AutoMigrate(&Task{})
 }

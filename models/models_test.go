@@ -10,26 +10,26 @@ import (
 
 func TestUser(t *testing.T) {
 	ti, _ := time.ParseInLocation("2006-01-02 15:04:05", "2019-11-06 22:00:00", time.Local)
-	todoOne := Todo{
-		TodoContent: faker.Name(),
+	taskOne := Task{
+		TaskContent: faker.Name(),
 		Deadline:    ti,
 	}
-	todoTwo := Todo{
-		TodoContent: faker.Name(),
+	taskTwo := Task{
+		TaskContent: faker.Name(),
 		Deadline:    time.Now(),
 	}
 
 	group := Group{
 		GroupName: faker.Name(),
-		Todos: []Todo{
-			todoTwo,
+		Tasks: []Task{
+			taskTwo,
 		},
 	}
 	user := User{
 		Username: faker.Username(),
 		Email:    faker.Email(),
-		Todos: []Todo{
-			todoOne,
+		Tasks: []Task{
+			taskOne,
 		},
 		Groups: []Group{
 			group,
@@ -51,31 +51,24 @@ func TestUserCURD(t *testing.T) {
 }
 
 func TestGroupCRUD(t *testing.T) {
-	user, _ := FindOneUserByUsername("wEDIXuS")
-	groups, count, err := user.PagedGroups(0, 3)
-	if err != nil {
-		panic("sx commit error")
-	}
-	if len(groups) != 3 {
-		panic("lens error")
-	}
-	if count != 5 {
-		panic(count)
+	user, _ := FindOneUserByUsername("test1")
+	for index := 0; index < 50; index++ {
+		user.CreateOneGroup(faker.Username())
 	}
 }
 
-func TestTodoCURD(t *testing.T) {
+func TestTaskCURD(t *testing.T) {
 	user, _ := FindOneUserByUsername("bcAVflI")
 	// group, _ := FindOneGroupByID(40)
-	// todos, count, err := user.PageTodosWithGroup(40, 0, 10)
+	// tasks, count, err := user.PageTasksWithGroup(40, 0, 10)
 	// if err != nil {
 	// 	panic(err)
 	// }
 	// if count != 33 {
 	// 	panic(count)
 	// }
-	// if len(todos) != 10 {
-	// 	panic(todos)
+	// if len(tasks) != 10 {
+	// 	panic(tasks)
 	// }
 	err := user.DeleteOneGroup(40)
 	if err != nil {
@@ -89,11 +82,11 @@ func TestHashIds(t *testing.T) {
 
 func TestMain(m *testing.M) {
 	AutoMigrateGroup()
-	AutoMigrateTodo()
+	AutoMigrateTask()
 	AutoMigrateUser()
 	exitCode := m.Run()
 	// DB.DropTableIfExists(User{})
-	// DB.DropTableIfExists(Todo{})
+	// DB.DropTableIfExists(Task{})
 	// DB.DropTableIfExists(Group{})
 	os.Exit(exitCode)
 }

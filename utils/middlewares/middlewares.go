@@ -1,0 +1,48 @@
+package middlewares
+
+import (
+	"net/http"
+	"time"
+	"todoList/models"
+	"todoList/serializers"
+	"todoList/utils/jwt"
+
+	"github.com/gin-gonic/gin"
+)
+
+func updateContextUserModel(c *gin.Context, username string) {
+	user, _ := models.FindOneUserByUsername(username)
+	c.Set("username", username)
+	c.Set("userModel", user)
+}
+
+func JwtAuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var errCode int
+		var data interface{}
+		errCode = serializers.Success
+		h := serializers.AuthorizationHeaderRequest{}
+		appG := serializers.Gin{C: c}
+		if err := c.ShouldBindHeader(&h); err != nil {
+			errCode = serializers.ErrorAuth
+		} else {
+			h.StripBearerPrefix()
+			claims, err := jwt.ParseJwtToken(h.Authorization)
+			if err != nil {
+				errCode = serializers.ErrorAuth
+			} else {
+				if !claims.VerifyExpiresAt(time.Now().Unix(), true) {
+					errCode = serializers.ErrorAuthCheckTokenTimeout
+				} else {
+					updateContextUserModel(c, (*claims)["username"].(string))
+				}
+			}
+		}
+		if errCode != serializers.Success {
+			appG.Response(http.StatusForbidden, errCode, data)
+			c.Abort()
+			return
+		}
+		c.Next()
+	}
+}

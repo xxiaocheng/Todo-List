@@ -7,11 +7,12 @@ import (
 type Group struct {
 	gorm.Model
 	GroupName string `gorm:"not null"`
-	Todos     []Todo
+	Tasks     []Task
 	User      User
 	UserId    uint `gorm:"index"`
 }
 
+// Migrate the `Group` model.
 func AutoMigrateGroup() {
 	DB.AutoMigrate(&Group{})
 }

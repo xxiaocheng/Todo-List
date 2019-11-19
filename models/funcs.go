@@ -20,8 +20,8 @@ func (user *User) setUserPassword(password string) error {
 	return nil
 }
 
-// 	if err := User.checkUserPassword("password0"); err != nil { password error }
-func (user *User) checkUserPassword(password string) error {
+// 	if err := User.CheckUserPassword("password0"); err != nil { password error }
+func (user *User) CheckUserPassword(password string) error {
 	bytePassword := []byte(password)
 	byteHashedPassword := []byte(user.PasswordHash)
 	return bcrypt.CompareHashAndPassword(byteHashedPassword, bytePassword)
@@ -120,7 +120,7 @@ func (user *User) DeleteOneGroup(groupID uint) error {
 		sx.Commit()
 		return errors.New("This group not owns by th user")
 	}
-	sx.Model(Todo{}).Where("group_id = ?", groupID).Update("group_id", 0)
+	sx.Model(Task{}).Where("group_id = ?", groupID).Update("group_id", 0)
 	sx.Delete(&group)
 	err := sx.Commit().Error
 	return err
@@ -148,103 +148,111 @@ func (user *User) ModifyGroupName(groupID uint, newGroupName string) error {
 func (user *User) PagedGroups(offset, limit int) ([]Group, int, error) {
 	var groups []Group
 	sx := DB.Begin()
-	sx.Model(&user).Related(&groups, "Groups").Offset(offset).Limit(limit)
+	sx.Model(&user).Offset(offset).Limit(limit).Related(&groups, "Groups")
 	count := sx.Model(&user).Association("Groups").Count()
 	err := sx.Commit().Error
 	return groups, count, err
 }
 
-func (user *User) CreateTodoWithoutGroup(todo Todo) error {
-	if todo.Deadline == (time.Time{}) {
-		todo.Deadline = time.Now()
+func (user *User) CreateTaskWithoutGroup(taskContent string) (Task,error) {
+	task:=Task{TaskContent:taskContent}
+	if task.Deadline == (time.Time{}) {
+		task.Deadline = time.Now()
 	}
-	err := DB.Model(&user).Association("Todos").Append(todo).Error
-	return err
+	err := DB.Model(&user).Association("Tasks").Append(&task).Error
+	return task,err
 }
 
-func (user *User) CreateTodoWithGroup(group Group, todo Todo) error {
-	if todo.Deadline == (time.Time{}) {
-		todo.Deadline = time.Now()
+func (user *User) CreateTaskWithGroup(groupID uint, taskContent string) (Task,error) {
+	group:=Group{}
+	task:=Task{TaskContent:taskContent}
+	if task.Deadline == (time.Time{}) {
+		task.Deadline = time.Now()
 	}
 	sx := DB.Begin()
-	sx.Model(&group)
+	sx.First(&group,groupID)
 	if group.UserId != user.ID {
 		sx.Commit()
-		return errors.New("This group not owns by the user")
+		return task,errors.New("This group not owns by the user")
 	}
-	todo.UserId = user.ID
-	err := sx.Model(&group).Association("Todos").Append(todo).Error
+	task.UserId = user.ID
+	err := sx.Model(&group).Association("Tasks").Append(&task).Error
 	sx.Commit()
-	return err
+	return task,err
 }
 
-func (user *User) PagedTodayTodos(offset, limit int) ([]Todo, int, error) {
-	var todos []Todo
+func (user *User) PagedTodayTasks(offset, limit int) ([]Task, int, error) {
+	var tasks []Task
 	sx := DB.Begin()
-	err := sx.Model(&user).Where("DATEDIFF(deadline,NOW()) = ? ", 0).Limit(limit).Offset(offset).Related(&todos, "Todos").Error
-	count := sx.Model(&user).Where("DATEDIFF(deadline,NOW()) = ? ", 0).Association("Todos").Count()
+	err := sx.Model(&user).Where("DATEDIFF(deadline,NOW()) = ? ", 0).Limit(limit).Offset(offset).Related(&tasks, "Tasks").Error
+	count := sx.Model(&user).Where("DATEDIFF(deadline,NOW()) = ? ", 0).Association("Tasks").Count()
 	sx.Commit()
-	return todos, count, err
+	return tasks, count, err
 }
 
-func (user *User) PagedDefaultGroupTodos(offset, w int) ([]Todo, int, error) {
-	var todos []Todo
+func (user *User) PagedDefaultGroupTasks(offset, limit int) ([]Task, int, error) {
+	var tasks []Task
 	sx := DB.Begin()
-	err := sx.Model(&user).Where("group_id = ?", 0).Limit(limit).Offset(offset).Related(&todos, "Todos").Error
-	count := sx.Model(&user).Where("group_id = ?", 0).Association("Todos").Count()
+	err := sx.Model(&user).Where("group_id = ?", 0).Limit(limit).Offset(offset).Related(&tasks, "Tasks").Error
+	count := sx.Model(&user).Where("group_id = ?", 0).Association("Tasks").Count()
 	sx.Commit()
-	return todos, count, err
+	return tasks, count, err
 }
 
-func (user *User) PageTodosWithGroup(groupID uint, offset, limit int) ([]Todo, int, error) {
+func (user *User) PageTasksWithGroup(groupID uint, offset, limit int) ([]Task, int, error) {
 	var group Group
-	var todos []Todo
+	var tasks []Task
 	sx := DB.Begin()
 	sx.First(&group, groupID)
 	if group.UserId != user.ID {
 		sx.Commit()
-		return todos, 0, errors.New("This group not owns by the user")
+		return tasks, 0, errors.New("This group not owns by the user")
 	}
-	err := sx.Model(&group).Limit(limit).Offset(offset).Related(&todos, "Todos").Error
-	count := sx.Model(&group).Association("Todos").Count()
+	err := sx.Model(&group).Limit(limit).Offset(offset).Related(&tasks, "Tasks").Error
+	count := sx.Model(&group).Association("Tasks").Count()
 	sx.Commit()
-	return todos, count, err
+	return tasks, count, err
 }
 
-func (user *User) DeleteOneTodo(todoID uint) error {
-	todo := Todo{}
-	DB.First(&todo, todoID)
-	if todo.UserId != user.ID {
-		return errors.New("This Todo not owns by the user")
+func (user *User) DeleteOneTask(taskID uint) error {
+	task := Task{}
+	DB.First(&task, taskID)
+	if task.UserId != user.ID {
+		return errors.New("This Task not owns by the user")
 	}
-	err := DB.Delete(&todo).Error
+	err := DB.Delete(&task).Error
 	return err
 }
 
-func FindOneTodoById(todoID uint) (Todo, error) {
-	todo := Todo{}
-	err := DB.First(&todo, todoID).Error
-	return todo, err
+func FindOneTaskById(taskID uint) (Task, error) {
+	task := Task{}
+	err := DB.First(&task, taskID).Error
+	return task, err
 }
 
-func (user *User) updateTodoAttr(todoID uint, name string, value interface{}) error {
-	todo, err := FindOneTodoById(todoID)
+func (user *User) updateTaskAttr(taskID uint, name string, value interface{}) error {
+	task, err := FindOneTaskById(taskID)
 	if err != nil {
-		return errors.New("Todo Not Found")
+		return errors.New("Task Not Found")
 	}
-	if todo.UserId != user.ID {
-		return errors.New("This Todo not owns by the user")
+	if task.UserId != user.ID {
+		return errors.New("This Task not owns by the user")
 	}
-	err = DB.Model(todo).Update(name, value).Error
+	err = DB.Model(task).Update(name, value).Error
 	return err
 }
 
-func (user *User) ModifyTodoContent(todoID uint, newContent string) error {
-	err := user.updateTodoAttr(todoID, "TodoContent", newContent)
+func (user *User) ModifyTaskContent(taskID uint, newContent string) error {
+	err := user.updateTaskAttr(taskID, "TaskContent", newContent)
 	return err
 }
 
-func (user *User) ModifyTodoDeadline(todoID uint, newDeadline time.Time) error {
-	err := user.updateTodoAttr(todoID, "Deadline", newDeadline)
+func (user *User) ModifyTaskDeadline(taskID uint, newDeadline time.Time) error {
+	err := user.updateTaskAttr(taskID, "Deadline", newDeadline)
+	return err
+}
+
+func (user *User) ModifyTaskStatus(taskID uint,newStatus bool) error  {
+	err := user.updateTaskAttr(taskID, "is_done", newStatus)
 	return err
 }
