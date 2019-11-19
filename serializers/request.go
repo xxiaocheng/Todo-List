@@ -34,14 +34,18 @@ func (r *LoginRequest) CheckAuth() (bool, error) {
 }
 
 type RegisterUserRequest struct {
-	Username string `form:"username" validate:"required"`
-	Password string `form:"password" validate:"required"`
+	Username string `form:"username" validate:"required,gte=5,lte=16"`
+	Password string `form:"password" validate:"required,gte=6,lte=16"`
 	Email    string `form:"email" validate:"required,email"`
 }
 
 func (r *RegisterUserRequest) Register() (user models.User, err error) {
 	user, err = models.CreateUser(r.Username, r.Password, r.Email)
 	return
+}
+
+type ModifyPasswordRequest struct {
+	Password string `form:"password" validate:"required,gte=6,lte=16"`
 }
 
 type PageDataRequest struct {

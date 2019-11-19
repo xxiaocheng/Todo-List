@@ -15,7 +15,8 @@ const (
 	ErrorEditTaskFail   = 10103
 	ErrorPutTaskFail    = 10104
 
-	ErrorPutUserFail = 10204
+	ErrorPutUserFail        = 10204
+	ErrorChangePasswordFail = 10205
 
 	ErrorAuthCheckTokenFail    = 30001
 	ErrorAuthCheckTokenTimeout = 30002
@@ -38,7 +39,8 @@ var ErrorMsgMap = map[int]string{
 	ErrorEditTaskFail:   "编辑TODO失败",
 	ErrorPutTaskFail:    "增加TODO失败",
 
-	ErrorPutUserFail: "增加用户失败",
+	ErrorPutUserFail:        "增加用户失败",
+	ErrorChangePasswordFail: "修改用户密码失败",
 
 	ErrorAuthCheckTokenFail:    "Token鉴权失败",
 	ErrorAuthCheckTokenTimeout: "Token已超时",
