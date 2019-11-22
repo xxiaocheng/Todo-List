@@ -9,6 +9,15 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// @Summary Get Jwt
+// @Tags Auth
+// @Accept multipart/form-data
+// @Produce  json
+// @Param username formData string true "username"
+// @Param password formData string true "password"
+// @Success 200 {object} serializers.JwtResponse "OK"
+// @Failure 401 {object} serializers.CommonResponse "FAIL"
+// @Router /auth/token [post]
 func UserLogin(c *gin.Context) {
 	loginRequest := serializers.LoginRequest{}
 	appG := serializers.Gin{C: c}
@@ -25,7 +34,7 @@ func UserLogin(c *gin.Context) {
 	}
 	ok, err := loginRequest.CheckAuth()
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, serializers.ErrorAuthCheckTokenFail, nil)
+		appG.Response(http.StatusUnauthorized, serializers.ErrorAuthCheckTokenFail, nil)
 		return
 	}
 	if !ok {
@@ -36,6 +45,16 @@ func UserLogin(c *gin.Context) {
 	c.JSON(http.StatusOK, token)
 }
 
+// @Summary User Register
+// @Tags Auth
+// @Accept multipart/form-data
+// @Produce  json
+// @Param username formData string true "username"
+// @Param password formData string true "password"
+// @Param email formData string true "email"
+// @Success 200 {object} serializers.CommonResponse "OK"
+// @Failure 400 {object} serializers.CommonResponse "FAIL"
+// @Router /auth/register [post]
 func UserRegister(c *gin.Context) {
 	registerRequest := serializers.RegisterUserRequest{}
 	appG := serializers.Gin{C: c}

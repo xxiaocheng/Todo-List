@@ -11,7 +11,16 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-// url="/:group/task/"
+// @Summary Create one task with group
+// @Tags Group
+// @Accept multipart/form-data
+// @Produce  json
+// @Param group path string true "group hashID"
+// @param task_content formData string true "task content"
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} serializers.CommonResponse "OK"
+// @Failure 400 {object} serializers.CommonResponse "FAIL"
+// @Router /group/{group}/task [post]
 func CreateOneTaskWithGroup(c *gin.Context) {
 	groupHashID := c.Param("group")
 	groupID := hashID.DecodeHashToID(groupHashID)
@@ -37,6 +46,15 @@ func CreateOneTaskWithGroup(c *gin.Context) {
 	return
 }
 
+// @Summary Create one task without group
+// @Tags Task
+// @Accept multipart/form-data
+// @Produce  json
+// @param task_content formData string true "task content"
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} serializers.CommonResponse "OK"
+// @Failure 400 {object} serializers.CommonResponse "FAIL"
+// @Router /task [post]
 func CreateOneTaskWithoutGroup(c *gin.Context) {
 	userModel := (c.MustGet("userModel")).(models.User)
 	r := serializers.CreateTaskRequest{}
@@ -61,6 +79,16 @@ func CreateOneTaskWithoutGroup(c *gin.Context) {
 
 }
 
+// @Summary Get Today`s tasks
+// @Tags Task
+// @Accept multipart/form-data
+// @Produce  json
+// @param offset query integer false "offset"
+// @param limit query integer false "limit"
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} serializers.CommonResponse "OK"
+// @Failure 400 {object} serializers.CommonResponse "FAIL"
+// @Router /task/today/ [get]
 func GetTodayTasks(c *gin.Context) {
 	pageDataRequest := serializers.PageDataRequest{}
 	appG := serializers.Gin{C: c}
@@ -83,6 +111,16 @@ func GetTodayTasks(c *gin.Context) {
 	appG.Response(http.StatusOK, serializers.Success, cr)
 }
 
+// @Summary Get default`s tasks
+// @Tags Task
+// @Accept multipart/form-data
+// @Produce  json
+// @param offset query integer false "offset"
+// @param limit query integer false "limit"
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} serializers.CommonResponse "OK"
+// @Failure 400 {object} serializers.CommonResponse "FAIL"
+// @Router /task/default/ [get]
 func GetDefaultGroupTasks(c *gin.Context) {
 	pageDataRequest := serializers.PageDataRequest{}
 	appG := serializers.Gin{C: c}
@@ -105,6 +143,16 @@ func GetDefaultGroupTasks(c *gin.Context) {
 	appG.Response(http.StatusOK, serializers.Success, cr)
 }
 
+// @Summary Get some group`s tasks
+// @Tags Group
+// @Accept multipart/form-data
+// @Produce  json
+// @param offset query integer false "offset"
+// @param limit query integer false "limit"
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} serializers.CommonResponse "OK"
+// @Failure 400 {object} serializers.CommonResponse "FAIL"
+// @Router /group/{group}/task [get]
 func GetTasksWithGroup(c *gin.Context) {
 	pageDataRequest := serializers.PageDataRequest{}
 	appG := serializers.Gin{C: c}
@@ -129,6 +177,15 @@ func GetTasksWithGroup(c *gin.Context) {
 	appG.Response(http.StatusOK, serializers.Success, cr)
 }
 
+// @Summary Delete one task
+// @Tags Task
+// @Accept multipart/form-data
+// @Produce  json
+// @param task path string true "task hashID"
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} serializers.CommonResponse "OK"
+// @Failure 400 {object} serializers.CommonResponse "FAIL"
+// @Router /task/{task} [delete]
 func DeleteOneTask(c *gin.Context) {
 	taskHashID := c.Param("task")
 	taskID := hashID.DecodeHashToID(taskHashID)
@@ -142,6 +199,18 @@ func DeleteOneTask(c *gin.Context) {
 	}
 }
 
+// @Summary Modify one task
+// @Tags Task
+// @Accept multipart/form-data
+// @Produce  json
+// @Param Authorization header string true "Bearer"
+// @param task_content formData string false "task content"
+// @param deadline formData string false "task deadline"
+// @param is_done formData boolean false "task status"
+// @param task path string true "task hashID"
+// @Success 200 {object} serializers.CommonResponse "OK"
+// @Failure 400 {object} serializers.CommonResponse "FAIL"
+// @Router /task [get]
 func ModifyTask(c *gin.Context) {
 	appG := serializers.Gin{C: c}
 	r := serializers.ModifyTaskRequest{

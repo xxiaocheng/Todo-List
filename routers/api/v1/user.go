@@ -8,6 +8,15 @@ import (
 	"todoList/serializers"
 )
 
+// @Summary Change User Password
+// @Tags User
+// @Accept multipart/form-data
+// @Produce  json
+// @Param Authorization header string true "Bearer"
+// @Param password formData string true "password"
+// @Success 200 {object} serializers.CommonResponse "OK"
+// @Failure 400 {object} serializers.CommonResponse "FAIL"
+// @Router /user/password [patch]
 func ChangeUserPassword(c *gin.Context) {
 	appG := serializers.Gin{C: c}
 	r := serializers.ModifyPasswordRequest{}

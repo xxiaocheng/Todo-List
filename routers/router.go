@@ -7,7 +7,7 @@ import (
 
 // No jwt middleware
 func AuthRouterRegister(router *gin.RouterGroup) {
-	router.POST("/login", v1.UserLogin)
+	router.POST("/token", v1.UserLogin)
 	router.POST("/register", v1.UserRegister)
 }
 
@@ -20,8 +20,8 @@ func GroupRouterRegister(router *gin.RouterGroup) {
 	router.DELETE("/:group", v1.DeleteOneGroup)
 	router.PATCH("/:group", v1.ModifyOneGroupName)
 	router.POST("/", v1.CreateOneGroup)
-	router.POST("/:group/todo", v1.CreateOneTaskWithGroup)
-	router.GET("/:group/todo", v1.GetTasksWithGroup)
+	router.POST("/:group/task", v1.CreateOneTaskWithGroup)
+	router.GET("/:group/task", v1.GetTasksWithGroup)
 }
 
 func TaskRouterRegister(router *gin.RouterGroup) {

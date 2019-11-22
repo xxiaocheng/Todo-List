@@ -1,7 +1,476 @@
-host: localhost:8080
+basePath: /api/v1
+definitions:
+  serializers.CommonResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
+  serializers.JwtResponse:
+    properties:
+      access_token:
+        type: string
+      expire_time:
+        type: integer
+    type: object
 info:
-  contact: {}
-  license: {}
+  contact:
+    email: cxxlxx0@gmail.com
+    name: ChengXiao
+  description: This is a docs for TodoList.
+  license:
+    name: MIT
+  title: TodoList API
   version: "1.0"
-paths: {}
+paths:
+  /auth/register:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: username
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: password
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: email
+        in: formData
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: User Register
+      tags:
+      - Auth
+  /auth/token:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: username
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.JwtResponse'
+        "401":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: Get Jwt
+      tags:
+      - Auth
+  /group/:
+    get:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: Paged all groups
+      tags:
+      - Group
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: group name
+        in: formData
+        name: group_name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: Create one  group
+      tags:
+      - Group
+  /group/{group}:
+    delete:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: group hashID
+        in: path
+        name: group
+        required: true
+        type: string
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: Delete one group by groupID
+      tags:
+      - Group
+    patch:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: group hashID
+        in: path
+        name: group
+        required: true
+        type: string
+      - description: new group name
+        in: formData
+        name: new_group_name
+        required: true
+        type: string
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: Rename group
+      tags:
+      - Group
+  /group/{group}/task:
+    get:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: offset
+        in: query
+        name: offset
+        required: true
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: Get some group`s tasks
+      tags:
+      - Group
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: group hashID
+        in: path
+        name: group
+        required: true
+        type: string
+      - description: task content
+        in: formData
+        name: task_content
+        required: true
+        type: string
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: Create one task with group
+      tags:
+      - Group
+  /task:
+    get:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: task content
+        in: formData
+        name: task_content
+        type: string
+      - description: task deadline
+        in: formData
+        name: deadline
+        type: string
+      - description: task status
+        in: formData
+        name: is_done
+        type: boolean
+      - description: task hashID
+        in: path
+        name: task
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: Modify one task
+      tags:
+      - Task
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: task content
+        in: formData
+        name: task_content
+        required: true
+        type: string
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: Create one task without group
+      tags:
+      - Task
+  /task/{task}:
+    delete:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: task hashID
+        in: path
+        name: task
+        required: true
+        type: string
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: Delete one task
+      tags:
+      - Task
+  /task/default/:
+    get:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: offset
+        in: query
+        name: offset
+        required: true
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: Get default`s tasks
+      tags:
+      - Task
+  /task/today/:
+    get:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: offset
+        in: query
+        name: offset
+        required: true
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: Get Today`s tasks
+      tags:
+      - Task
+  /user/password:
+    patch:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      summary: Change User Password
+      tags:
+      - User
 swagger: "2.0"

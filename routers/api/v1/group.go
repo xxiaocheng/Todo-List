@@ -10,6 +10,16 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
+// @Summary Paged all groups
+// @Tags Group
+// @Accept multipart/form-data
+// @Produce  json
+// @Param limit query integer false "limit"
+// @Param offset query integer false "offset"
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} serializers.CommonResponse "OK"
+// @Failure 400 {object} serializers.CommonResponse "FAIL"
+// @Router /group/ [get]
 func GetGroups(c *gin.Context) {
 	pageDataRequest := serializers.PageDataRequest{}
 	appG := serializers.Gin{C: c}
@@ -32,6 +42,15 @@ func GetGroups(c *gin.Context) {
 	appG.Response(http.StatusOK, serializers.Success, cr)
 }
 
+// @Summary Delete one group by groupID
+// @Tags Group
+// @Accept multipart/form-data
+// @Produce  json
+// @Param group path string true "group hashID"
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} serializers.CommonResponse "OK"
+// @Failure 400 {object} serializers.CommonResponse "FAIL"
+// @Router /group/{group} [delete]
 func DeleteOneGroup(c *gin.Context) {
 	appG := serializers.Gin{C: c}
 	groupHashID := c.Param("group")
@@ -47,6 +66,16 @@ func DeleteOneGroup(c *gin.Context) {
 	}
 }
 
+// @Summary Rename group
+// @Tags Group
+// @Accept multipart/form-data
+// @Produce  json
+// @Param group path string true "group hashID"
+// @Param new_group_name formData string true "new group name"
+// @Param Authorization header string true "Bearer"
+// @Success 200 {object} serializers.CommonResponse "OK"
+// @Failure 400 {object} serializers.CommonResponse "FAIL"
+// @Router /group/{group} [patch]
 func ModifyOneGroupName(c *gin.Context) {
 	appG := serializers.Gin{C: c}
 	// get param
@@ -75,6 +104,15 @@ func ModifyOneGroupName(c *gin.Context) {
 	}
 }
 
+// @Summary Create one  group
+// @Tags Group
+// @Accept multipart/form-data
+// @Produce  json
+// @Param Authorization header string true "Bearer"
+// @Param group_name formData string true "group name"
+// @Success 201 {object} serializers.CommonResponse "OK"
+// @Failure 400 {object} serializers.CommonResponse "FAIL"
+// @Router /group/ [post]
 func CreateOneGroup(c *gin.Context) {
 	appG := serializers.Gin{C: c}
 	// get param
