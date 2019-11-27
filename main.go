@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/cors"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	_ "todoList/docs"
@@ -14,6 +15,10 @@ import (
 // @version 1.0
 // @description This is a docs for TodoList.
 
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+
 // @contact.name ChengXiao
 // @contact.email cxxlxx0@gmail.com
 // @license.name MIT
@@ -22,7 +27,8 @@ import (
 func main() {
 	r := gin.Default()
 	r.Use(logs.LoggerToFile())
-	r.Use(middlewares.CorsMiddleware())
+	r.Use(cors.Default())
+	//r.Use(middlewares.CorsMiddleware())
 
 	// swagger
 	url := ginSwagger.URL("/swagger/doc.json") // The url pointing to API definition

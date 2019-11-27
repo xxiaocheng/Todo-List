@@ -14,9 +14,9 @@ import (
 // @Tags Group
 // @Accept multipart/form-data
 // @Produce  json
+// @Security ApiKeyAuth
 // @Param limit query integer false "limit"
 // @Param offset query integer false "offset"
-// @Param Authorization header string true "Bearer"
 // @Success 200 {object} serializers.CommonResponse "OK"
 // @Failure 400 {object} serializers.CommonResponse "FAIL"
 // @Router /group/ [get]
@@ -46,8 +46,8 @@ func GetGroups(c *gin.Context) {
 // @Tags Group
 // @Accept multipart/form-data
 // @Produce  json
+// @Security ApiKeyAuth
 // @Param group path string true "group hashID"
-// @Param Authorization header string true "Bearer"
 // @Success 200 {object} serializers.CommonResponse "OK"
 // @Failure 400 {object} serializers.CommonResponse "FAIL"
 // @Router /group/{group} [delete]
@@ -70,9 +70,9 @@ func DeleteOneGroup(c *gin.Context) {
 // @Tags Group
 // @Accept multipart/form-data
 // @Produce  json
+// @Security ApiKeyAuth
 // @Param group path string true "group hashID"
 // @Param new_group_name formData string true "new group name"
-// @Param Authorization header string true "Bearer"
 // @Success 200 {object} serializers.CommonResponse "OK"
 // @Failure 400 {object} serializers.CommonResponse "FAIL"
 // @Router /group/{group} [patch]
@@ -108,7 +108,7 @@ func ModifyOneGroupName(c *gin.Context) {
 // @Tags Group
 // @Accept multipart/form-data
 // @Produce  json
-// @Param Authorization header string true "Bearer"
+// @Security ApiKeyAuth
 // @Param group_name formData string true "group name"
 // @Success 201 {object} serializers.CommonResponse "OK"
 // @Failure 400 {object} serializers.CommonResponse "FAIL"

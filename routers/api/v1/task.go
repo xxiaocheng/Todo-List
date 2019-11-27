@@ -15,9 +15,9 @@ import (
 // @Tags Group
 // @Accept multipart/form-data
 // @Produce  json
+// @Security ApiKeyAuth
 // @Param group path string true "group hashID"
 // @param task_content formData string true "task content"
-// @Param Authorization header string true "Bearer"
 // @Success 200 {object} serializers.CommonResponse "OK"
 // @Failure 400 {object} serializers.CommonResponse "FAIL"
 // @Router /group/{group}/task [post]
@@ -50,8 +50,8 @@ func CreateOneTaskWithGroup(c *gin.Context) {
 // @Tags Task
 // @Accept multipart/form-data
 // @Produce  json
+// @Security ApiKeyAuth
 // @param task_content formData string true "task content"
-// @Param Authorization header string true "Bearer"
 // @Success 200 {object} serializers.CommonResponse "OK"
 // @Failure 400 {object} serializers.CommonResponse "FAIL"
 // @Router /task [post]
@@ -83,9 +83,9 @@ func CreateOneTaskWithoutGroup(c *gin.Context) {
 // @Tags Task
 // @Accept multipart/form-data
 // @Produce  json
+// @Security ApiKeyAuth
 // @param offset query integer false "offset"
 // @param limit query integer false "limit"
-// @Param Authorization header string true "Bearer"
 // @Success 200 {object} serializers.CommonResponse "OK"
 // @Failure 400 {object} serializers.CommonResponse "FAIL"
 // @Router /task/today/ [get]
@@ -115,9 +115,9 @@ func GetTodayTasks(c *gin.Context) {
 // @Tags Task
 // @Accept multipart/form-data
 // @Produce  json
+// @Security ApiKeyAuth
 // @param offset query integer false "offset"
 // @param limit query integer false "limit"
-// @Param Authorization header string true "Bearer"
 // @Success 200 {object} serializers.CommonResponse "OK"
 // @Failure 400 {object} serializers.CommonResponse "FAIL"
 // @Router /task/default/ [get]
@@ -147,9 +147,10 @@ func GetDefaultGroupTasks(c *gin.Context) {
 // @Tags Group
 // @Accept multipart/form-data
 // @Produce  json
+// @Security ApiKeyAuth
+// @param group path string true "groupHashId"
 // @param offset query integer false "offset"
 // @param limit query integer false "limit"
-// @Param Authorization header string true "Bearer"
 // @Success 200 {object} serializers.CommonResponse "OK"
 // @Failure 400 {object} serializers.CommonResponse "FAIL"
 // @Router /group/{group}/task [get]
@@ -181,8 +182,8 @@ func GetTasksWithGroup(c *gin.Context) {
 // @Tags Task
 // @Accept multipart/form-data
 // @Produce  json
+// @Security ApiKeyAuth
 // @param task path string true "task hashID"
-// @Param Authorization header string true "Bearer"
 // @Success 200 {object} serializers.CommonResponse "OK"
 // @Failure 400 {object} serializers.CommonResponse "FAIL"
 // @Router /task/{task} [delete]
@@ -203,14 +204,14 @@ func DeleteOneTask(c *gin.Context) {
 // @Tags Task
 // @Accept multipart/form-data
 // @Produce  json
-// @Param Authorization header string true "Bearer"
+// @Security ApiKeyAuth
 // @param task_content formData string false "task content"
 // @param deadline formData string false "task deadline"
 // @param is_done formData boolean false "task status"
 // @param task path string true "task hashID"
 // @Success 200 {object} serializers.CommonResponse "OK"
 // @Failure 400 {object} serializers.CommonResponse "FAIL"
-// @Router /task [get]
+// @Router /task/{task} [patch]
 func ModifyTask(c *gin.Context) {
 	appG := serializers.Gin{C: c}
 	r := serializers.ModifyTaskRequest{

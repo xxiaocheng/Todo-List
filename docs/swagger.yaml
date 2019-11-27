@@ -102,11 +102,6 @@ paths:
         in: query
         name: offset
         type: integer
-      - description: Bearer
-        in: header
-        name: Authorization
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -118,6 +113,8 @@ paths:
           description: FAIL
           schema:
             $ref: '#/definitions/serializers.CommonResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Paged all groups
       tags:
       - Group
@@ -125,11 +122,6 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
-      - description: Bearer
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: group name
         in: formData
         name: group_name
@@ -146,6 +138,8 @@ paths:
           description: FAIL
           schema:
             $ref: '#/definitions/serializers.CommonResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create one  group
       tags:
       - Group
@@ -159,11 +153,6 @@ paths:
         name: group
         required: true
         type: string
-      - description: Bearer
-        in: header
-        name: Authorization
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -175,6 +164,8 @@ paths:
           description: FAIL
           schema:
             $ref: '#/definitions/serializers.CommonResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Delete one group by groupID
       tags:
       - Group
@@ -192,11 +183,6 @@ paths:
         name: new_group_name
         required: true
         type: string
-      - description: Bearer
-        in: header
-        name: Authorization
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -208,6 +194,8 @@ paths:
           description: FAIL
           schema:
             $ref: '#/definitions/serializers.CommonResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Rename group
       tags:
       - Group
@@ -216,21 +204,19 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
+      - description: groupHashId
+        in: path
+        name: group
+        required: true
+        type: string
       - description: offset
         in: query
         name: offset
-        required: true
         type: integer
       - description: limit
         in: query
         name: limit
-        required: true
         type: integer
-      - description: Bearer
-        in: header
-        name: Authorization
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -242,6 +228,8 @@ paths:
           description: FAIL
           schema:
             $ref: '#/definitions/serializers.CommonResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get some group`s tasks
       tags:
       - Group
@@ -259,9 +247,30 @@ paths:
         name: task_content
         required: true
         type: string
-      - description: Bearer
-        in: header
-        name: Authorization
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create one task with group
+      tags:
+      - Group
+  /task:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: task content
+        in: formData
+        name: task_content
         required: true
         type: string
       produces:
@@ -275,19 +284,41 @@ paths:
           description: FAIL
           schema:
             $ref: '#/definitions/serializers.CommonResponse'
-      summary: Create one task with group
+      security:
+      - ApiKeyAuth: []
+      summary: Create one task without group
       tags:
-      - Group
-  /task:
-    get:
+      - Task
+  /task/{task}:
+    delete:
       consumes:
       - multipart/form-data
       parameters:
-      - description: Bearer
-        in: header
-        name: Authorization
+      - description: task hashID
+        in: path
+        name: task
         required: true
         type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+        "400":
+          description: FAIL
+          schema:
+            $ref: '#/definitions/serializers.CommonResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete one task
+      tags:
+      - Task
+    patch:
+      consumes:
+      - multipart/form-data
+      parameters:
       - description: task content
         in: formData
         name: task_content
@@ -316,64 +347,9 @@ paths:
           description: FAIL
           schema:
             $ref: '#/definitions/serializers.CommonResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Modify one task
-      tags:
-      - Task
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: task content
-        in: formData
-        name: task_content
-        required: true
-        type: string
-      - description: Bearer
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/serializers.CommonResponse'
-        "400":
-          description: FAIL
-          schema:
-            $ref: '#/definitions/serializers.CommonResponse'
-      summary: Create one task without group
-      tags:
-      - Task
-  /task/{task}:
-    delete:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: task hashID
-        in: path
-        name: task
-        required: true
-        type: string
-      - description: Bearer
-        in: header
-        name: Authorization
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/serializers.CommonResponse'
-        "400":
-          description: FAIL
-          schema:
-            $ref: '#/definitions/serializers.CommonResponse'
-      summary: Delete one task
       tags:
       - Task
   /task/default/:
@@ -384,18 +360,11 @@ paths:
       - description: offset
         in: query
         name: offset
-        required: true
         type: integer
       - description: limit
         in: query
         name: limit
-        required: true
         type: integer
-      - description: Bearer
-        in: header
-        name: Authorization
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -407,6 +376,8 @@ paths:
           description: FAIL
           schema:
             $ref: '#/definitions/serializers.CommonResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get default`s tasks
       tags:
       - Task
@@ -418,18 +389,11 @@ paths:
       - description: offset
         in: query
         name: offset
-        required: true
         type: integer
       - description: limit
         in: query
         name: limit
-        required: true
         type: integer
-      - description: Bearer
-        in: header
-        name: Authorization
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -441,6 +405,8 @@ paths:
           description: FAIL
           schema:
             $ref: '#/definitions/serializers.CommonResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Get Today`s tasks
       tags:
       - Task
@@ -449,11 +415,6 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
-      - description: Bearer
-        in: header
-        name: Authorization
-        required: true
-        type: string
       - description: password
         in: formData
         name: password
@@ -470,7 +431,14 @@ paths:
           description: FAIL
           schema:
             $ref: '#/definitions/serializers.CommonResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Change User Password
       tags:
       - User
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

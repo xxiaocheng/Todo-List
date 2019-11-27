@@ -34,11 +34,11 @@ func UserLogin(c *gin.Context) {
 	}
 	ok, err := loginRequest.CheckAuth()
 	if err != nil {
-		appG.Response(http.StatusUnauthorized, serializers.ErrorAuthCheckTokenFail, nil)
+		appG.Response(http.StatusForbidden, serializers.ErrorAuthCheckTokenFail, nil)
 		return
 	}
 	if !ok {
-		appG.Response(http.StatusUnauthorized, serializers.ErrorAuth, nil)
+		appG.Response(http.StatusForbidden, serializers.ErrorAuth, nil)
 		return
 	}
 	token := jwt.GenJwtToken(loginRequest.Username)

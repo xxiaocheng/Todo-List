@@ -12,7 +12,7 @@ import (
 // @Tags User
 // @Accept multipart/form-data
 // @Produce  json
-// @Param Authorization header string true "Bearer"
+// @Security ApiKeyAuth
 // @Param password formData string true "password"
 // @Success 200 {object} serializers.CommonResponse "OK"
 // @Failure 400 {object} serializers.CommonResponse "FAIL"
