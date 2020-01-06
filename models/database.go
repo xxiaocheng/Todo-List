@@ -17,6 +17,9 @@ var DB *gorm.DB
 
 func init() {
 	InitMysql()
+	AutoMigrateGroup()
+	AutoMigrateTask()
+	AutoMigrateUser()
 }
 
 func InitMysql() {
