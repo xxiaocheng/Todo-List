@@ -1,14 +1,15 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/gin-contrib/cors"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 	_ "todoList/docs"
 	"todoList/logs"
 	"todoList/routers"
 	"todoList/utils/middlewares"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // @title TodoList API
@@ -26,7 +27,7 @@ import (
 // @BasePath /api/v1
 func main() {
 	r := gin.Default()
-	r.Use(logs.LoggerToFile())
+	r.Use(logs.LoggerToFile(), gin.Recovery())
 	r.Use(cors.Default())
 	//r.Use(middlewares.CorsMiddleware())
 

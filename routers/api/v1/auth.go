@@ -42,7 +42,7 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 	token := jwt.GenJwtToken(loginRequest.Username)
-	c.JSON(http.StatusOK, token)
+	appG.Response(http.StatusOK, serializers.Success, token)
 }
 
 // @Summary User Register
