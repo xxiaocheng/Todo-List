@@ -1,5 +1,5 @@
-# Task-List
-A Task-List backend by Golang
+#  TODO list
+A Todo app backend by Golang
 
 ## Usage
 
